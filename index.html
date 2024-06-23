@@ -110,13 +110,15 @@
         function showRandomCard() {
             const cardImage = document.getElementById('card');
             
-            // Apply fadeOut animation
-            cardImage.style.animation = 'fadeOut 4s';
+           
             
             // Change the image after the fadeOut animation
             setTimeout(() => {
                 const cardIndex = getRandomCardIndex();
                 cardImage.src = `cards/card (${cardIndex}).png`;
+
+                 // Apply fadeOut animation
+            cardImage.style.animation = 'fadeOut 4s';
                 
                 // Apply fadeIn animation
                 cardImage.style.animation = 'fadeIn 4s';
