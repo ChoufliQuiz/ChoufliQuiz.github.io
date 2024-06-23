@@ -38,9 +38,8 @@
             align-items: center;
             justify-content: flex-start;
             height: 100%;
-            padding-top: 100px; /* Adjust top padding as needed */
+            padding-top: 200px; /* Adjust top padding as needed */
         }
-
         #logo {
             max-width: 80%; /* Adjust maximum width as needed */
             max-height: 50vh; /* Adjust maximum height as needed */
@@ -64,12 +63,6 @@
             from { opacity: 1; }
             to { opacity: 0; }
         }
-        .title {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
         .button {
             padding: 10px 20px;
             font-size: 1rem;
@@ -78,7 +71,7 @@
             background-color: #007BFF;
             color: white;
             border-radius: 5px;
-            
+            margin-top: 20px;
         }
         .button:hover {
             background-color: #0056b3;
@@ -89,61 +82,69 @@
 
     <div id="homeScreen" class="screen active">
         <img id="logo" src="media/Choufli Quiz.png" alt="Logo">
-        <br><br><br><br><br><br><br><br>
         <button class="button" onclick="start()">Start</button>
     </div>
     
+    <div id="cardScreen" class="screen">
+        <img id="card" src="" alt="Card" loading="lazy" onclick="showRandomCard()">
+    </div>
 
-<div id="cardScreen" class="screen">
-    <img id="card" src="" alt="Card" onclick="showRandomCard()">
-</div>
+    <audio id="backgroundMusic" src="media/2.mp3" loop></audio> <!-- Add your music file path here -->
 
-<audio id="backgroundMusic" src="media/2.mp3" loop></audio> <!-- Add your music file path here -->
+    <script>
+        const numberOfCards = 103; // Change this to the actual number of cards you have
+        const preloadedImages = [];
 
-<script>
-    const numberOfCards = 103; // Change this to the actual number of cards you have
+        function preloadImages() {
+            for (let i = 1; i <= numberOfCards; i++) {
+                const img = new Image();
+                img.src = `cards/card (${i}).png`;
+                preloadedImages.push(img);
+            }
+        }
 
-    function getRandomCardIndex() {
-        return Math.floor(Math.random() * numberOfCards) + 1;
-    }
+        function getRandomCardIndex() {
+            return Math.floor(Math.random() * numberOfCards) + 1;
+        }
 
-    function showRandomCard() {
-        const cardImage = document.getElementById('card');
-        
-        // Apply fadeOut animation
-        cardImage.style.animation = 'fadeOut 1s';
-        
-        // Change the image after the fadeOut animation
-        setTimeout(() => {
-            const cardIndex = getRandomCardIndex();
-            cardImage.src = `cards/card (${cardIndex}).png`;
+        function showRandomCard() {
+            const cardImage = document.getElementById('card');
             
-            // Apply fadeIn animation
-            cardImage.style.animation = 'fadeIn 1s';
-        }, 1000); // Match the duration of fadeOut animation
-    }
+            // Apply fadeOut animation
+            cardImage.style.animation = 'fadeOut 1s';
+            
+            // Change the image after the fadeOut animation
+            setTimeout(() => {
+                const cardIndex = getRandomCardIndex();
+                cardImage.src = `cards/card (${cardIndex}).png`;
+                
+                // Apply fadeIn animation
+                cardImage.style.animation = 'fadeIn 1s';
+            }, 1000); // Match the duration of fadeOut animation
+        }
 
-    function start() {
-        const homeScreen = document.getElementById('homeScreen');
-        const cardScreen = document.getElementById('cardScreen');
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        
-        homeScreen.classList.remove('active');
-        cardScreen.classList.add('active');
-        
-        backgroundMusic.play().then(() => {
-            // Music started successfully
-        }).catch(error => {
-            console.log('Autoplay was prevented:', error);
-        });
-        
-        showRandomCard();
-    }
+        function start() {
+            const homeScreen = document.getElementById('homeScreen');
+            const cardScreen = document.getElementById('cardScreen');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            
+            homeScreen.classList.remove('active');
+            cardScreen.classList.add('active');
+            
+            backgroundMusic.play().then(() => {
+                // Music started successfully
+            }).catch(error => {
+                console.log('Autoplay was prevented:', error);
+            });
+            
+            showRandomCard();
+        }
 
-    window.onload = () => {
-        document.getElementById('homeScreen').classList.add('active');
-    };
-</script>
+        window.onload = () => {
+            document.getElementById('homeScreen').classList.add('active');
+            preloadImages(); // Preload images on window load
+        };
+    </script>
 
 </body>
 </html>
