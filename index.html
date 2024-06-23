@@ -83,7 +83,7 @@
     <div id="homeScreen" class="screen active">
         <img id="logo" src="media/Choufli Quiz.png" alt="Logo">
         <br><br><br><br>
-        <button class="button" onclick="start()">Start 1</button>
+        <button class="button" onclick="start()">Start </button>
     </div>
     
     <div id="cardScreen" class="screen">
@@ -111,15 +111,15 @@
         function showRandomCard() {
             const cardImage = document.getElementById('card');
             
-           
+              // Apply fadeOut animation
+              cardImage.style.animation = 'fadeOut 4s';
             
             // Change the image after the fadeOut animation
             setTimeout(() => {
                 const cardIndex = getRandomCardIndex();
                 cardImage.src = `cards/new/card (${cardIndex}) (Medium).png`;
 
-                 // Apply fadeOut animation
-            cardImage.style.animation = 'fadeOut 4s';
+              
                 
                 // Apply fadeIn animation
                 cardImage.style.animation = 'fadeIn 4s';
