@@ -15,7 +15,7 @@
             flex-direction: column;
         }
         .screen {
-            background-image: url('media/1.jpg'); /* Add your background image path here */
+            background-image: url('media/1.jpg');
             display: none;
             width: 100%;
             height: 100%;
@@ -30,7 +30,7 @@
             flex-direction: column;
         }
         #homeScreen {
-            background-image: url('media/1.jpg'); /* Add your background image path here */
+            background-image: url('media/1.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -38,30 +38,40 @@
             align-items: center;
             justify-content: flex-start;
             height: 100%;
-            padding-top: 200px; /* Adjust top padding as needed */
+            padding-top: 200px;
         }
         #logo {
-            max-width: 80%; /* Adjust maximum width as needed */
-            max-height: 50vh; /* Adjust maximum height as needed */
+            max-width: 80%;
+            max-height: 50vh;
         }
-        #card {
+        #card-container {
+            position: relative;
             cursor: pointer;
             transition: transform 0.2s;
-            max-width: 80%; /* Adjust this value as needed */
-            max-height: 80vh; /* Adjust this value as needed */
-            opacity: 1;
-            animation: fadeIn 1s; /* Animation for fading in */
+            max-width: 80%;
+            max-height: 80vh;
+            animation: fadeIn 1s;
         }
-        #card:hover {
+        #card {
+            display: block;
+            width: 100%;
+            opacity: 1;
+        }
+        #card-container:hover {
             transform: scale(1.05);
+        }
+        #overlay {
+            position: absolute;
+            bottom: 0;
+            left: -100;
+            width: 90%;
+            height: 37%;
+            background: rgb(255, 255, 255);
+            display: none;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
         }
         .button {
             padding: 10px 20px;
@@ -83,18 +93,22 @@
     <div id="homeScreen" class="screen active">
         <img id="logo" src="media/Choufli Quiz.png" alt="Logo">
         <br><br><br><br>
-        <button class="button" onclick="start()">Start   </button>
+        <button class="button" onclick="start()">Start</button>
     </div>
     
     <div id="cardScreen" class="screen">
-        <img id="card" src="" alt="Card" loading="lazy" onclick="showRandomCard()">
+        <div id="card-container" onclick="toggleCard()">
+            <img id="card" src="" alt="Card" loading="lazy">
+            <div id="overlay"></div>
+        </div>
     </div>
 
-    <audio id="backgroundMusic" src="media/2.mp3" loop></audio> <!-- Add your music file path here -->
+    <audio id="backgroundMusic" src="media/2.mp3" loop></audio>
 
     <script>
-        const numberOfCards = 103; // Change this to the actual number of cards you have
+        const numberOfCards = 103;
         const preloadedImages = [];
+        let isBottomVisible = false;
 
         function preloadImages() {
             for (let i = 1; i <= numberOfCards; i++) {
@@ -108,22 +122,21 @@
             return Math.floor(Math.random() * numberOfCards) + 1;
         }
 
-        function showRandomCard() {
+        function toggleCard() {
+            const overlay = document.getElementById('overlay');
             const cardImage = document.getElementById('card');
             
-              // Apply fadeOut animation
-              //cardImage.style.animation = 'fadeOut 4s';
-            
-            // Change the image after the fadeOut animation
-            setTimeout(() => {
+            if (!isBottomVisible) {
+                // Show bottom half
+                overlay.style.display = 'none';
+                isBottomVisible = true;
+            } else {
+                // Change card
                 const cardIndex = getRandomCardIndex();
                 cardImage.src = `cards/small/card (${cardIndex}) (Small).png`;
-
-              
-                
-                // Apply fadeIn animation
-                //cardImage.style.animation = 'fadeIn 4s';
-            }, 10); // Match the duration of fadeOut animation
+                overlay.style.display = 'block';
+                isBottomVisible = false;
+            }
         }
 
         function start() {
@@ -135,7 +148,7 @@
             cardScreen.classList.add('active');
             
             backgroundMusic.play().then(() => {
-                // Music started successfully
+                console.log('Music started successfully');
             }).catch(error => {
                 console.log('Autoplay was prevented:', error);
             });
@@ -143,9 +156,19 @@
             showRandomCard();
         }
 
+        function showRandomCard() {
+            const cardImage = document.getElementById('card');
+            const overlay = document.getElementById('overlay');
+
+            const cardIndex = getRandomCardIndex();
+            cardImage.src = `cards/small/card (${cardIndex}) (Small).png`;
+            overlay.style.display = 'block'; // Hide bottom half initially
+            isBottomVisible = false;
+        }
+
         window.onload = () => {
             document.getElementById('homeScreen').classList.add('active');
-            preloadImages(); // Preload images on window load
+            preloadImages();
         };
     </script>
 
